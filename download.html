@@ -1,0 +1,512 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https:; object-src 'none'; base-uri 'self'; form-action 'self' https:;">
+  <title>Download | Dream AC</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2032%2032%22%3E%3Crect%20width=%2232%22%20height=%2232%22%20rx=%227%22%20fill=%22%23090b0f%22/%3E%3Cpath%20d=%22M9%207h8c5%200%208%204%208%209s-3%209-8%209H9z%22%20fill=%22%23b91c1c%22/%3E%3C/svg%3E" type="image/x-icon">
+  <link rel="stylesheet" href="download.css">
+</head>
+<body><div class="bg-forensic"></div>
+
+    <div id="confirmModal" class="modal-overlay hidden">
+        <div class="modal-content glass-strong rounded-3xl p-8 md:p-10 max-w-2xl mx-4 border border-red-700/30 relative overflow-hidden">
+            <div class="scan-line"></div>
+
+            <div class="text-center mb-6">
+                <div class="relative inline-block mb-4">
+                    <div class="w-16 h-16 glass rounded-2xl flex items-center justify-center border border-yellow-500/30 glow-accent mx-auto">
+                        <i class="bi bi-exclamation-triangle text-4xl text-yellow-400"></i>
+                    </div>
+                </div>
+                <h2 class="text-3xl font-bold text-white mb-2">Confirm Download</h2>
+                <p class="text-gray-400">Please review and accept our terms before proceeding</p>
+            </div>
+
+            <div class="space-y-4 mb-6 p-5 rounded-xl glass border border-white/5 max-h-64 overflow-y-auto">
+                <div class="flex items-start gap-3">
+                    <i class="bi bi-shield-check text-red-400 text-xl flex-shrink-0 mt-1"></i>
+                    <div>
+                        <h3 class="text-white font-semibold mb-1">Software Usage</h3>
+                        <p class="text-sm text-gray-400">You agree to use Dream AC Scanner exclusively for legitimate forensic analysis and anti-cheat detection purposes.</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3">
+                    <i class="bi bi-file-text text-red-400 text-xl flex-shrink-0 mt-1"></i>
+                    <div>
+                        <h3 class="text-white font-semibold mb-1">Terms of Service</h3>
+                        <p class="text-sm text-gray-400">By downloading, you acknowledge that you have read and agree to our Terms of Service and licensing conditions.</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3">
+                    <i class="bi bi-shield-lock text-red-400 text-xl flex-shrink-0 mt-1"></i>
+                    <div>
+                        <h3 class="text-white font-semibold mb-1">Privacy Policy</h3>
+                        <p class="text-sm text-gray-400">You understand how we collect, process, and protect your data as outlined in our Privacy Policy.</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3">
+                    <i class="bi bi-info-circle text-red-400 text-xl flex-shrink-0 mt-1"></i>
+                    <div>
+                        <h3 class="text-white font-semibold mb-1">System Requirements</h3>
+                        <p class="text-sm text-gray-400">Ensure your system meets minimum requirements: Windows 10/11, Visual C++ Redistributable, and stable internet connection.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-6 p-4 rounded-xl bg-red-700/5 border border-red-700/20">
+                <label class="custom-checkbox">
+                    <input type="checkbox" id="agreeCheckbox" />
+                    <span class="text-sm text-gray-300">
+                        I have read and agree to the
+                        <a href="terms.html" target="_blank" rel="noopener noreferrer" class="text-red-400 hover:text-red-300 underline">Terms of Service</a>
+                        and
+                        <a href="terms.html" target="_blank" rel="noopener noreferrer" class="text-red-400 hover:text-red-300 underline">Privacy Policy</a>
+                    </span>
+                </label>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-3">
+                <button id="cancelBtn"
+                        class="flex-1 px-6 py-3 rounded-xl glass border border-white/10 text-white font-semibold hover:bg-white/5 transition-all">
+                    <i class="bi bi-x-circle mr-2"></i>
+                    Cancel
+                </button>
+                <button id="confirmBtn"
+                        class="btn-disabled flex-1 px-6 py-3 rounded-xl bg-gradient-to-r from-red-700 to-red-800 text-white font-semibold transition-all">
+                    <i class="bi bi-check-circle mr-2"></i>
+                    Accept & Download
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <header class="fixed top-0 left-0 right-0 z-50 glass-strong border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+
+                <div class="flex items-center gap-4 animate-in delay-1">
+                    <img src='data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2064%2064%22%3E%3Crect%20width=%2264%22%20height=%2264%22%20rx=%2214%22%20fill=%22%230b0b0c%22/%3E%3Cpath%20d=%22M18%2014h18c10%200%2016%208%2016%2018s-6%2018-16%2018H18z%22%20fill=%22%23b91c1c%22/%3E%3C/svg%3E' alt="Dream AC" class="h-10 w-auto hover-lift cursor-pointer">
+                    <div class="hidden sm:block">
+                        <div class="text-lg font-bold text-white">Download Center</div>
+                        <div class="text-xs text-red-400">Forensic Software Distribution</div>
+                    </div>
+                </div>
+
+                <nav class="hidden md:flex items-center space-x-8 text-sm text-zinc-300 animate-in delay-2">
+                    <a href="download.html" class="nav-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                        </svg>
+                        Pricing
+                    </a>
+                    <a href="download.html" class="nav-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                        </svg>
+                        Features
+                    </a>
+                    <a href="#common-issues" class="nav-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                        </svg>
+                        Guide
+                    </a>
+                    <a href="terms.html" class="nav-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        Terms
+                    </a>
+                    <a href="terms.html" class="nav-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                        Privacy
+                    </a>
+                    <a href="terms.html" class="nav-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Changelogs
+                    </a>
+                    <a href="https://discord.gg/dreamac" class="nav-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+                        </svg>
+                        Discord
+                    </a>
+                </nav>
+
+                <div class="flex items-center space-x-4 animate-in delay-3">
+                    <a href="https://discord.gg/dreamac"
+                       class="btn-login hidden sm:flex items-center gap-2 px-4 py-2 rounded-lg glass border border-red-700/30 text-sm text-zinc-300">
+                        <i class="bi bi-box-arrow-in-right"></i>
+                        Login
+                    </a>
+                    <button id="menuToggle" class="md:hidden text-zinc-400 hover:text-white text-2xl hover-lift">
+                        <i class="bi bi-list"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div id="mobileMenu" class="hidden fixed top-20 left-4 right-4 glass-strong rounded-2xl p-6 space-y-4 z-40 border border-red-700/20">
+        <a href="download.html" class="menu-item block text-zinc-300">Pricing</a>
+        <a href="download.html" class="menu-item block text-zinc-300">Features</a>
+        <a href="#common-issues" class="menu-item block text-zinc-300">Guide</a>
+        <a href="terms.html" class="menu-item block text-zinc-300">Terms</a>
+        <a href="terms.html" class="menu-item block text-zinc-300">Privacy</a>
+        <a href="terms.html" class="menu-item block text-zinc-300">Changelogs</a>
+        <a href="https://discord.gg/dreamac" class="menu-item block text-zinc-300">Discord</a>
+        <hr class="border-white/10">
+        <a href="https://discord.gg/dreamac" class="btn-login block text-center py-2 rounded-lg glass border border-red-700/30 text-zinc-300">
+            Login
+        </a>
+    </div>
+
+    <main class="flex flex-col items-center justify-center min-h-screen px-4 pt-32 pb-20">
+
+        <div class="max-w-4xl w-full space-y-8">
+
+            <div class="glass-strong rounded-3xl p-8 md:p-12 border border-red-700/20 relative overflow-hidden animate-in delay-4">
+                <div class="scan-line"></div>
+
+                <div class="text-center mb-8">
+                    <div class="relative inline-block mb-6 animate-in delay-5 main-icon-wrapper">
+                        <div class="main-icon-glow absolute inset-0 bg-red-700/30 rounded-2xl blur-2xl"></div>
+                        <div class="main-icon relative w-20 h-20 glass rounded-2xl flex items-center justify-center border border-red-700/30 glow-accent animate-pulse-slow">
+                            <i class="bi bi-download text-4xl text-red-400"></i>
+                        </div>
+                    </div>
+
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-black gradient-text mb-4 animate-in delay-5">
+                        Download Dream AC
+                    </h1>
+
+                    <p class="text-gray-400 text-lg max-w-xl mx-auto animate-in delay-6">
+                        Enter your secure PIN to download the latest forensic software package
+                    </p>
+                </div>
+
+                <form method="POST" action="" id="downloadForm" data-download-url="" data-error-message="" data-allowed-download-hosts=""
+                      class="max-w-xl mx-auto mb-8 animate-in delay-6">
+
+                    <div class="flex flex-col sm:flex-row gap-4">
+
+                        <div class="flex-1 relative">
+                            <div class="absolute left-4 top-1/2 -translate-y-1/2 text-red-400">
+                                <i class="bi bi-shield-lock"></i>
+                            </div>
+                            <input type="text"
+                                name="pin"
+                                id="pinInput"
+                                placeholder="Enter 6-digit PIN"
+                                maxlength="6"
+                                inputmode="numeric"
+                                pattern="\d{6}"
+                                autocomplete="one-time-code"
+                                required
+                                value=""
+                                class="input-forensic w-full pl-12 pr-4 py-4 rounded-xl glass border border-red-700/20 focus:border-red-700 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-red-700/50 font-mono tracking-wider">
+                        </div>
+
+                        <button type="button"
+                                id="downloadBtn"
+                                class="btn-primary relative px-8 py-4 rounded-xl bg-gradient-to-r from-red-700 to-red-800 text-white font-semibold flex items-center justify-center gap-3 whitespace-nowrap overflow-hidden">
+                            <span class="relative z-10 flex items-center gap-3">
+                                <i class="bi bi-download text-lg"></i>
+                                <span>Download</span>
+                                <i class="bi bi-arrow-right"></i>
+                            </span>
+                        </button>
+                    </div>
+
+                    <div class="mt-4 text-center text-xs text-gray-500">
+                        By downloading, you agree to our
+                        <a href="terms.html" target="_blank" rel="noopener noreferrer" class="text-red-400 hover:text-red-300 underline transition-colors">Terms of Service</a>
+                        and
+                        <a href="terms.html" target="_blank" rel="noopener noreferrer" class="text-red-400 hover:text-red-300 underline transition-colors">Privacy Policy</a>
+                    </div>
+                </form>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+
+                    <div class="stats-card glass rounded-xl p-5 border border-white/5">
+                        <div class="flex items-center gap-4">
+                            <div class="stat-icon w-12 h-12 rounded-xl bg-red-700/10 border border-red-700/30 flex items-center justify-center flex-shrink-0">
+                                <i class="bi bi-lightning-charge-fill text-2xl text-red-400"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm text-gray-400">Download Speed</div>
+                                <div class="text-lg font-bold text-white">Instant</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stats-card glass rounded-xl p-5 border border-white/5">
+                        <div class="flex items-center gap-4">
+                            <div class="stat-icon w-12 h-12 rounded-xl bg-red-700/10 border border-red-700/30 flex items-center justify-center flex-shrink-0">
+                                <i class="bi bi-shield-check text-2xl text-red-400"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm text-gray-400">Security</div>
+                                <div class="text-lg font-bold text-white">Verified</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stats-card glass rounded-xl p-5 border border-white/5">
+                        <div class="flex items-center gap-4">
+                            <div class="stat-icon w-12 h-12 rounded-xl bg-red-700/10 border border-red-700/30 flex items-center justify-center flex-shrink-0">
+                                <i class="bi bi-arrow-repeat text-2xl text-red-400"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm text-gray-400">Version</div>
+                                <div class="text-lg font-bold text-white">Latest</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 flex items-center justify-center gap-2 text-xs text-gray-500">
+                    <i class="bi bi-info-circle text-red-400"></i>
+                    <span>Secure download - SHA-256 verified - Auto-update enabled</span>
+                </div>
+            </div>
+
+            <div id="common-issues" class="glass-strong rounded-3xl p-8 md:p-10 border border-red-700/20 animate-in delay-7">
+
+                <div class="text-center mb-8">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-red-700/30 mb-4">
+                        <i class="bi bi-tools text-red-400"></i>
+                        <span class="text-sm font-semibold text-red-300">Troubleshooting</span>
+                    </div>
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-3">Common Issues</h2>
+                    <p class="text-gray-400">Resolve privacy concerns and execution problems</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6">
+
+                    <div class="troubleshoot-card glass rounded-2xl p-6 border border-white/5">
+                        <div class="flex items-start gap-4 mb-5">
+                            <div class="troubleshoot-icon w-14 h-14 rounded-xl bg-orange-500/10 border border-orange-500/30 flex items-center justify-center flex-shrink-0">
+                                <i class="bi bi-shield-exclamation text-2xl text-orange-400"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-white mb-2">Privacy & DNS Issues</h3>
+                                <p class="text-sm text-gray-400">Scanner stuck or automatically closed due to network restrictions?</p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-3 mb-5">
+                            <div class="flex items-center gap-3 text-sm text-gray-300">
+                                <i class="bi bi-check-circle-fill text-green-400"></i>
+                                <span>Changed your DNS for Cloudflare 1.1.1.1</span>
+                            </div>
+                            <div class="flex items-center gap-3 text-sm text-gray-300">
+                                <i class="bi bi-check-circle-fill text-green-400"></i>
+                                <span>Secure DNS resolution</span>
+                            </div>
+                            <div class="flex items-center gap-3 text-sm text-gray-300">
+                                <i class="bi bi-check-circle-fill text-green-400"></i>
+                                <span>Enhanced privacy protection</span>
+                            </div>
+                        </div>
+
+                        <a href="https://1.1.1.1/" target="_blank" rel="noopener noreferrer"
+                           class="btn-download w-full flex items-center justify-between px-5 py-3 rounded-xl bg-gradient-to-r from-orange-600 to-orange-500 hover:from-orange-500 hover:to-orange-400 text-white font-semibold">
+                            <span class="flex items-center gap-2">
+                                <i class="bi bi-cloud-download"></i>
+                                Download Cloudflare WARP
+                            </span>
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+
+                    <div class="troubleshoot-card glass rounded-2xl p-6 border border-white/5">
+                        <div class="flex items-start gap-4 mb-5">
+                            <div class="troubleshoot-icon w-14 h-14 rounded-xl bg-red-500/10 border border-red-500/30 flex items-center justify-center flex-shrink-0">
+                                <i class="bi bi-exclamation-octagon text-2xl text-red-400"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-white mb-2">Execution Problems</h3>
+                                <p class="text-sm text-gray-400">Missing <code class="text-red-300 font-mono text-xs">vcruntime140.dll</code> or runtime errors</p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-3 mb-5">
+                            <div class="flex items-center gap-3 text-sm text-gray-300">
+                                <i class="bi bi-check-circle-fill text-green-400"></i>
+                                <span>Required runtime libraries</span>
+                            </div>
+                            <div class="flex items-center gap-3 text-sm text-gray-300">
+                                <i class="bi bi-check-circle-fill text-green-400"></i>
+                                <span>Microsoft Visual C++ x64</span>
+                            </div>
+                            <div class="flex items-center gap-3 text-sm text-gray-300">
+                                <i class="bi bi-check-circle-fill text-green-400"></i>
+                                <span>Fix DLL missing errors</span>
+                            </div>
+                        </div>
+
+                        <a href="https://aka.ms/vs/17/release/vc_redist.x64.exe" target="_blank" rel="noopener noreferrer"
+                           class="btn-download w-full flex items-center justify-between px-5 py-3 rounded-xl bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white font-semibold">
+                            <span class="flex items-center gap-2">
+                                <i class="bi bi-microsoft"></i>
+                                Download Visual C++ (x64)
+                            </span>
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+
+                </div>
+
+                <div class="mt-8 p-4 rounded-xl bg-red-700/5 border border-red-700/20">
+                    <div class="flex items-start gap-3">
+                        <i class="bi bi-info-circle text-red-400 text-lg flex-shrink-0 mt-0.5"></i>
+                        <div class="text-sm text-red-300">
+                            <strong>Still having issues?</strong> Visit our <a href="terms.html" target="_blank" rel="noopener noreferrer" class="underline hover:text-red-200">documentation</a> or join our <a href="https://discord.gg/dreamac" target="_blank" rel="noopener noreferrer" class="underline hover:text-red-200">Discord server</a> for support.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-strong rounded-3xl p-8 md:p-10 border border-red-700/20 animate-in delay-8">
+
+                <div class="text-center mb-8">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-red-700/30 mb-4">
+                        <i class="bi bi-file-earmark-text text-red-400"></i>
+                        <span class="text-sm font-semibold text-red-300">Legal & Compliance</span>
+                    </div>
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-3">Terms & Policies</h2>
+                    <p class="text-gray-400">Review our legal documentation and usage guidelines</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6">
+
+                    <div class="troubleshoot-card glass rounded-2xl p-6 border border-white/5">
+                        <div class="flex items-start gap-4 mb-5">
+                            <div class="troubleshoot-icon w-14 h-14 rounded-xl bg-red-700/10 border border-red-700/30 flex items-center justify-center flex-shrink-0">
+                                <i class="bi bi-file-text text-2xl text-red-400"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-white mb-2">Terms of Service</h3>
+                                <p class="text-sm text-gray-400">Review our service terms, user obligations, and software usage guidelines</p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-3 mb-5">
+                            <div class="flex items-center gap-3 text-sm text-gray-300">
+                                <i class="bi bi-check-circle-fill text-green-400"></i>
+                                <span>User responsibilities</span>
+                            </div>
+                            <div class="flex items-center gap-3 text-sm text-gray-300">
+                                <i class="bi bi-check-circle-fill text-green-400"></i>
+                                <span>Software usage rights</span>
+                            </div>
+                            <div class="flex items-center gap-3 text-sm text-gray-300">
+                                <i class="bi bi-check-circle-fill text-green-400"></i>
+                                <span>License agreements</span>
+                            </div>
+                        </div>
+
+                        <a href="terms.html" target="_blank" rel="noopener noreferrer"
+                           class="btn-download w-full flex items-center justify-between px-5 py-3 rounded-xl bg-gradient-to-r from-red-700 to-red-700 hover:from-red-600 hover:to-red-500 text-white font-semibold">
+                            <span class="flex items-center gap-2">
+                                <i class="bi bi-file-earmark-check"></i>
+                                Read Terms of Service
+                            </span>
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+
+                    <div class="troubleshoot-card glass rounded-2xl p-6 border border-white/5">
+                        <div class="flex items-start gap-4 mb-5">
+                            <div class="troubleshoot-icon w-14 h-14 rounded-xl bg-red-700/10 border border-red-700/30 flex items-center justify-center flex-shrink-0">
+                                <i class="bi bi-shield-lock text-2xl text-red-400"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-white mb-2">Privacy Policy</h3>
+                                <p class="text-sm text-gray-400">Learn how we collect, use, and protect your personal information</p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-3 mb-5">
+                            <div class="flex items-center gap-3 text-sm text-gray-300">
+                                <i class="bi bi-check-circle-fill text-green-400"></i>
+                                <span>Data collection practices</span>
+                            </div>
+                            <div class="flex items-center gap-3 text-sm text-gray-300">
+                                <i class="bi bi-check-circle-fill text-green-400"></i>
+                                <span>Information security</span>
+                            </div>
+                            <div class="flex items-center gap-3 text-sm text-gray-300">
+                                <i class="bi bi-check-circle-fill text-green-400"></i>
+                                <span>User privacy rights</span>
+                            </div>
+                        </div>
+
+                        <a href="terms.html" target="_blank" rel="noopener noreferrer"
+                           class="btn-download w-full flex items-center justify-between px-5 py-3 rounded-xl bg-gradient-to-r from-red-700 to-red-700 hover:from-red-600 hover:to-red-500 text-white font-semibold">
+                            <span class="flex items-center gap-2">
+                                <i class="bi bi-shield-check"></i>
+                                Read Privacy Policy
+                            </span>
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+
+                </div>
+
+                <div class="mt-8 p-4 rounded-xl bg-red-700/5 border border-red-700/20">
+                    <div class="flex items-start gap-3">
+                        <i class="bi bi-info-circle text-red-400 text-lg flex-shrink-0 mt-0.5"></i>
+                        <div class="text-sm text-red-300">
+                            <strong>Important:</strong> By using Dream AC software, you acknowledge that you have read, understood, and agree to be bound by our Terms of Service and Privacy Policy. Last updated: January 2026.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <div id="toast-container" class="fixed z-50" aria-live="polite" aria-atomic="true"></div>
+
+    <footer class="relative z-40 glass-strong border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500">
+
+                <div class="flex items-center gap-3">
+                    <img src='data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2064%2064%22%3E%3Crect%20width=%2264%22%20height=%2264%22%20rx=%2214%22%20fill=%22%230b0b0c%22/%3E%3Cpath%20d=%22M18%2014h18c10%200%2016%208%2016%2018s-6%2018-16%2018H18z%22%20fill=%22%23b91c1c%22/%3E%3C/svg%3E' alt="Dream AC" class="w-5 h-5 opacity-60">
+                    <span>&copy; 2026 Dream AC. All rights reserved.</span>
+                </div>
+
+                <div class="flex items-center gap-6">
+                    <a href="terms.html" class="hover:text-white transition-colors">Terms</a>
+                    <a href="terms.html" class="hover:text-white transition-colors">Privacy</a>
+                    <a href="https://discord.gg/dreamac" class="hover:text-white transition-colors flex items-center gap-1.5">
+                        <i class="bi bi-discord"></i>
+                        Discord
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    
+
+    
+
+
+  <script src="download.js"></script>
+</body>
+</html>
+
+
+
